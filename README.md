@@ -1,5 +1,7 @@
 # dovas.net
 
+hello
+
 My personal website and blog index. It is intentionally simple: static HTML, CSS, and a tiny bit of JavaScript for small browser niceties.
 
 ## Stack
