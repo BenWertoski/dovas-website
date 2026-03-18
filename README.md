@@ -31,4 +31,4 @@ If the site is down, it's probably a DNS issue. It's always a DNS issue.
 
 ## License
 
-MIT — steal it, I dare you. It's a white page with text on it.
+[The Dovas License (DL) v1.0](LICENSE) — read the terms, they're unreasonable.
