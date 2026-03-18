@@ -22,153 +22,399 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-            color: #1a1a1a;
-            background: #e8e8e8;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Courier New', Courier, monospace;
+            color: #2a2a2a;
+            background: #1a1a1a;
+            line-height: 1.4;
+            -webkit-font-smoothing: none;
             min-height: 100vh;
             overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
+            padding-bottom: 200px;
         }
 
-        .bg {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
+        .receipt {
+            position: relative;
+            z-index: 1;
+            width: 360px;
+            background: #f5f2eb;
+            padding: 32px 24px 48px;
+            transform: rotate(-1.2deg);
+            box-shadow:
+                2px 4px 20px rgba(0, 0, 0, 0.5),
+                0 0 60px rgba(0, 0, 0, 0.15);
+            /* Paper texture via CSS noise */
+            background-image:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.008) 2px,
+                    rgba(0, 0, 0, 0.008) 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 3px,
+                    rgba(0, 0, 0, 0.005) 3px,
+                    rgba(0, 0, 0, 0.005) 6px
+                );
+            background-color: #f5f2eb;
+        }
+
+        /* Wrapper for receipt + shredder scene */
+        .receipt-scene {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+
+        /* Shredder machine */
+        .shredder {
+            position: relative;
+            width: 400px;
+            margin-top: -2px;
+            z-index: 2;
+            transform: rotate(-1.2deg);
+        }
+
+        .shredder-slot {
+            width: 370px;
+            height: 6px;
+            background: #111;
+            margin: 0 auto;
+            border-radius: 1px;
+            box-shadow:
+                inset 0 2px 4px rgba(0, 0, 0, 0.8),
+                0 -1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .shredder-body {
+            width: 100%;
+            height: 72px;
+            background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 15%, #2d2d2d 50%, #252525 85%, #2a2a2a 100%);
+            border-radius: 0 0 8px 8px;
+            position: relative;
+            box-shadow:
+                0 4px 16px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.3);
             overflow: hidden;
         }
 
-        .blob {
+        /* Metallic brushed texture */
+        .shredder-body::before {
+            content: '';
             position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 1px,
+                rgba(255, 255, 255, 0.02) 1px,
+                rgba(255, 255, 255, 0.02) 2px
+            );
+        }
+
+        /* Top bevel highlight */
+        .shredder-body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 5%, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0.12) 70%, transparent 95%);
+        }
+
+        .shredder-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.12);
+        }
+
+        .shredder-led {
+            position: absolute;
+            top: 50%;
+            right: 24px;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.5;
-            animation: drift 20s ease-in-out infinite alternate;
+            background: #22cc44;
+            box-shadow:
+                0 0 4px #22cc44,
+                0 0 8px rgba(34, 204, 68, 0.4);
+            animation: led-pulse 3s ease-in-out infinite;
         }
 
-        .blob-1 {
-            width: 500px;
-            height: 500px;
-            background: #bbb;
-            top: -10%;
-            left: -10%;
-            animation-duration: 22s;
+        @keyframes led-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
-        .blob-2 {
-            width: 400px;
-            height: 400px;
-            background: #999;
-            top: 40%;
-            right: -15%;
-            animation-duration: 18s;
-            animation-delay: -5s;
+        .shredder-screw {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #555, #333 60%, #222);
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.15),
+                0 1px 2px rgba(0, 0, 0, 0.4);
         }
 
-        .blob-3 {
-            width: 350px;
-            height: 350px;
-            background: #ccc;
-            bottom: -5%;
-            left: 20%;
-            animation-duration: 25s;
-            animation-delay: -10s;
+        .shredder-screw::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(35deg);
+            width: 6px;
+            height: 1px;
+            background: #222;
+            box-shadow: 0 0 0 0.5px rgba(255,255,255,0.05);
         }
 
-        @keyframes drift {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(60px, -40px) scale(1.05); }
-            66% { transform: translate(-30px, 50px) scale(0.95); }
-            100% { transform: translate(40px, 20px) scale(1.02); }
-        }
+        .shredder-screw.left { left: 14px; }
+        .shredder-screw.right { right: 14px; }
 
-        .container {
+        /* Output slot on bottom of shredder */
+        .shredder-output {
+            width: 370px;
+            height: 4px;
+            margin: 0 auto;
+            background: #111;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
             position: relative;
             z-index: 1;
-            max-width: 640px;
-            margin: 0 auto;
-            padding: 80px 24px 120px;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 20px;
-            padding: 48px 40px;
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.06),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        /* Shredded paper strips */
+        .shredder-strips {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin-top: -1px;
+            transform: rotate(-1.2deg);
+            z-index: 0;
+            position: relative;
         }
 
-        header {
-            margin-bottom: 56px;
+        .strip {
+            width: 8px;
+            background: #f5f2eb;
+            border-radius: 0 0 2px 2px;
+            position: relative;
+            box-shadow: 1px 0 1px rgba(0,0,0,0.08), -1px 0 1px rgba(0,0,0,0.05);
+            transform-origin: top center;
+            /* Subtle paper texture on strips */
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.015) 3px,
+                rgba(0, 0, 0, 0.015) 6px
+            );
+            background-color: #f5f2eb;
         }
 
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
+        /* Every other strip slightly different shade */
+        .strip:nth-child(even) {
+            background-color: #f2efea;
         }
 
-        .subtitle {
-            font-size: 16px;
-            color: #666;
+        /* Subtle curl on strip bottoms */
+        .strip::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.06));
+            border-radius: 0 0 2px 2px;
         }
 
-        section {
-            margin-bottom: 40px;
-        }
-
-        section:last-of-type {
-            margin-bottom: 0;
-        }
-
-        h2 {
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #999;
+        .store-header {
+            text-align: center;
             margin-bottom: 16px;
         }
 
-        .entry-desc {
-            font-size: 15px;
-            color: #444;
+        .bullseye {
+            display: inline-block;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 8px solid #cc0000;
+            position: relative;
+            margin-bottom: 4px;
         }
 
-        .skills-list {
+        .bullseye::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #cc0000;
+        }
+
+        .store-name {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 0.15em;
+            color: #cc0000;
+        }
+
+        .store-info {
+            font-size: 11px;
+            color: #555;
+            line-height: 1.5;
+            opacity: 0.85;
+        }
+
+        .divider {
+            border: none;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            color: #999;
+            text-align: center;
+            margin: 14px 0;
+            overflow: hidden;
+            opacity: 0.7;
+        }
+
+        .divider::before {
+            content: '- - - - - - - - - - - - - - - - - - - -';
+        }
+
+        .meta {
+            font-size: 11px;
+            color: #555;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        .line-item {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .skill {
-            font-size: 14px;
-            color: #333;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            padding: 5px 14px;
-            border-radius: 20px;
-            transition: background 0.2s, transform 0.2s;
-        }
-
-        .skill:hover {
-            background: rgba(255, 255, 255, 0.75);
-            transform: translateY(-1px);
-        }
-
-        footer {
-            margin-top: 48px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            justify-content: space-between;
             font-size: 13px;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .line-item .label {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .line-item .dots {
+            flex: 1;
+            overflow: hidden;
+            color: #bbb;
+            margin: 0 4px;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        .line-item .dots::before {
+            content: '..................................................';
+        }
+
+        .line-item .price {
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #888;
+            margin-top: 12px;
+            margin-bottom: 2px;
+        }
+
+        .total-section .line-item {
+            font-size: 13px;
+        }
+
+        .total-section .grand-total {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+
+        .total-section .grand-total .price {
+            font-weight: bold;
+        }
+
+        /* Thermal fade effect — uneven opacity on some lines */
+        .fade-light {
+            opacity: 0.78;
+        }
+
+        .fade-med {
+            opacity: 0.88;
+        }
+
+        .barcode {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .barcode-bars {
+            display: flex;
+            justify-content: center;
+            gap: 1px;
+            margin-bottom: 6px;
+        }
+
+        .barcode-bars span {
+            display: inline-block;
+            height: 40px;
+            background: #2a2a2a;
+        }
+
+        .barcode-number {
+            font-size: 11px;
+            color: #666;
+            letter-spacing: 0.2em;
+        }
+
+        .thank-you {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.08em;
+        }
+
+        .return-policy {
+            text-align: center;
+            font-size: 9px;
             color: #aaa;
+            margin-top: 8px;
+            line-height: 1.5;
+            opacity: 0.7;
         }
 
         #fire {
@@ -181,85 +427,220 @@
             pointer-events: none;
         }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 32px 12px 60px;
+        @media (max-width: 420px) {
+            .receipt {
+                width: calc(100% - 24px);
+                padding: 24px 16px 40px;
+                transform: rotate(0deg);
             }
 
-            .glass-card {
-                padding: 32px 24px;
-                border-radius: 16px;
+            .shredder {
+                width: calc(100% - 12px);
+                transform: rotate(0deg);
             }
 
-            h1 {
-                font-size: 26px;
+            .shredder-slot,
+            .shredder-output {
+                width: calc(100% - 20px);
+            }
+
+            .shredder-strips {
+                transform: rotate(0deg);
+            }
+
+            .store-name {
+                font-size: 24px;
+            }
+
+            .line-item {
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
+    <div class="receipt-scene">
+    <div class="receipt">
+        <div class="store-header">
+            <div class="bullseye"></div>
+            <div class="store-name">TARGET</div>
+            <div class="store-info">
+                1234 EMPLOYMENT BLVD<br>
+                INTERNET, CA 90210<br>
+                (555) 000-0000
+            </div>
+        </div>
 
-    <div class="container">
-        <div class="glass-card">
-            <header>
-                <h1>Dovas</h1>
-                <p class="subtitle">Software Engineer</p>
-            </header>
+        <div class="divider"></div>
 
-            <section>
-                <h2>About</h2>
-                <p class="entry-desc">
-                    I write code and sometimes it works. Based somewhere with WiFi.
-                </p>
-            </section>
+        <div class="meta">
+            ST# 0042  OP# 007  TE# 01  TR# 8675309<br>
+            03/18/2026  14:32:07
+        </div>
 
-            <section>
-                <h2>Experience</h2>
-                <p class="entry-desc">None worth mentioning.</p>
-            </section>
+        <div class="divider"></div>
 
-            <section>
-                <h2>Education</h2>
-                <p class="entry-desc">YouTube tutorials and Stack Overflow. No degree required when you can Google fast enough.</p>
-            </section>
+        <div class="section-label">Experience</div>
+        <div class="line-item">
+            <span class="label">EXPERIENCE - NONE</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
 
-            <section>
-                <h2>Skills</h2>
-                <div class="skills-list">
-                    <span class="skill">Golfing</span>
-                    <span class="skill">Googling error messages</span>
-                    <span class="skill">Closing laptop lid to fix bugs</span>
-                    <span class="skill">Blaming DNS</span>
-                    <span class="skill">Turning it off and on again</span>
-                    <span class="skill">Looking busy in standups</span>
-                    <span class="skill">Writing READMEs instead of code</span>
-                    <span class="skill">Pushing to main on Fridays</span>
-                </div>
-            </section>
+        <div class="section-label">Education</div>
+        <div class="line-item fade-med">
+            <span class="label">EDUCATION - YOUTUBE</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
+        <div class="line-item fade-light">
+            <span class="label">STACK OVERFLOW DEGREE</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
 
-            <section>
-                <h2>Certifications</h2>
-                <p class="entry-desc">None. But I did finish a LinkedIn Learning course once. Forgot which one.</p>
-            </section>
+        <div class="section-label">Skills</div>
+        <div class="line-item">
+            <span class="label">GOLFING</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
+        <div class="line-item fade-med">
+            <span class="label">GOOGLING ERRORS</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
+        <div class="line-item">
+            <span class="label">CLOSING LAPTOP LID</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
+        <div class="line-item fade-light">
+            <span class="label">BLAMING DNS</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
+        <div class="line-item fade-med">
+            <span class="label">OFF AND ON AGAIN</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
+        <div class="line-item">
+            <span class="label">LOOKING BUSY</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
+        <div class="line-item fade-light">
+            <span class="label">READMES NOT CODE</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
+        <div class="line-item">
+            <span class="label">PUSH TO MAIN FRIDAY</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
 
-            <section>
-                <h2>Contact</h2>
-                <p class="entry-desc">dovas[at]dovas[dot]net</p>
-            </section>
+        <div class="section-label">Certifications</div>
+        <div class="line-item fade-med">
+            <span class="label">LINKEDIN LEARNING (1x)</span>
+            <span class="dots"></span>
+            <span class="price">$0.00</span>
+        </div>
 
-            <footer>
-                &copy; 2026 Dovas
-            </footer>
+        <div class="divider"></div>
+
+        <div class="total-section">
+            <div class="line-item">
+                <span class="label">SUBTOTAL</span>
+                <span class="dots"></span>
+                <span class="price">$0.00</span>
+            </div>
+            <div class="line-item fade-med">
+                <span class="label">TAX</span>
+                <span class="dots"></span>
+                <span class="price">$0.00</span>
+            </div>
+            <div class="line-item grand-total">
+                <span class="label">TOTAL</span>
+                <span class="dots"></span>
+                <span class="price">$0.00</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="meta fade-light">
+            VISA DEBIT  ************0000<br>
+            AUTH CODE: 000000<br>
+            CASHIER: DOVAS
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="barcode">
+            <div class="barcode-bars" id="barcode"></div>
+            <div class="barcode-number">0 42069 13370 0</div>
+        </div>
+
+        <div class="thank-you">THANK YOU FOR SHOPPING</div>
+        <div class="return-policy">
+            RETURNS W/ RECEIPT WITHIN 90 DAYS<br>
+            dovas[at]dovas[dot]net<br>
+            &copy; 2026 DOVAS
         </div>
     </div>
+
+    <!-- Shredder machine -->
+    <div class="shredder">
+        <div class="shredder-slot"></div>
+        <div class="shredder-body">
+            <div class="shredder-screw left"></div>
+            <div class="shredder-label">FELLOWES</div>
+            <div class="shredder-led"></div>
+            <div class="shredder-screw right"></div>
+        </div>
+        <div class="shredder-output"></div>
+    </div>
+
+    <!-- Shredded paper strips -->
+    <div class="shredder-strips" id="strips"></div>
+
+    </div>
+
     <canvas id="fire"></canvas>
 
     <script>
+        // Generate shredder strips
+        (function() {
+            const container = document.getElementById('strips');
+            const count = 32;
+            for (let i = 0; i < count; i++) {
+                const strip = document.createElement('div');
+                strip.className = 'strip';
+                const height = 80 + Math.random() * 100;
+                const rotation = (Math.random() - 0.5) * 6;
+                const translateX = (Math.random() - 0.5) * 3;
+                strip.style.height = height + 'px';
+                strip.style.transform = `rotate(${rotation}deg) translateX(${translateX}px)`;
+                // Slight opacity variation for realism
+                strip.style.opacity = 0.85 + Math.random() * 0.15;
+                container.appendChild(strip);
+            }
+        })();
+
+        // Generate barcode bars
+        (function() {
+            const barcode = document.getElementById('barcode');
+            const pattern = [2,1,1,3,1,2,1,1,3,2,1,1,2,1,3,1,1,2,3,1,1,2,1,1,3,1,2,1,1,2,1,3,1,2,1,1,2,3,1,1,2,1,1,3,2,1,1,2,1,3,1,1,2,1];
+            pattern.forEach(w => {
+                const bar = document.createElement('span');
+                bar.style.width = w + 'px';
+                barcode.appendChild(bar);
+            });
+        })();
+
+        // Fire animation — untouched
         const canvas = document.getElementById('fire');
         const ctx = canvas.getContext('2d');
         let particles = [];
