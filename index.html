@@ -6,6 +6,7 @@
     <title>Dovas — Software Engineer</title>
     <meta name="description" content="Dovas — Software Engineer. Personal website and CV.">
     <link rel="canonical" href="https://dovas.net">
+    <link rel="icon" id="favicon" type="image/png">
     <style>
         * {
             margin: 0;
@@ -840,6 +841,30 @@
         }
 
         animate();
+
+        // Dynamic favicon — green when active, red when tab is hidden
+        (function() {
+            const link = document.getElementById('favicon');
+            const fc = document.createElement('canvas');
+            fc.width = 32;
+            fc.height = 32;
+            const fctx = fc.getContext('2d');
+
+            function setFavicon(color) {
+                fctx.clearRect(0, 0, 32, 32);
+                fctx.beginPath();
+                fctx.arc(16, 16, 14, 0, Math.PI * 2);
+                fctx.fillStyle = color;
+                fctx.fill();
+                link.href = fc.toDataURL('image/png');
+            }
+
+            setFavicon('#22cc44');
+
+            document.addEventListener('visibilitychange', function() {
+                setFavicon(document.hidden ? '#ff2222' : '#22cc44');
+            });
+        })();
     </script>
 </body>
 </html>
