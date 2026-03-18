@@ -16,19 +16,86 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
             color: #1a1a1a;
-            background: #fff;
+            background: #e8e8e8;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: drift 20s ease-in-out infinite alternate;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: #bbb;
+            top: -10%;
+            left: -10%;
+            animation-duration: 22s;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: #999;
+            top: 40%;
+            right: -15%;
+            animation-duration: 18s;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 350px;
+            height: 350px;
+            background: #ccc;
+            bottom: -5%;
+            left: 20%;
+            animation-duration: 25s;
+            animation-delay: -10s;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(60px, -40px) scale(1.05); }
+            66% { transform: translate(-30px, 50px) scale(0.95); }
+            100% { transform: translate(40px, 20px) scale(1.02); }
         }
 
         .container {
+            position: relative;
+            z-index: 1;
             max-width: 640px;
             margin: 0 auto;
             padding: 80px 24px 120px;
         }
 
+        .glass-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 48px 40px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
         header {
-            margin-bottom: 64px;
+            margin-bottom: 56px;
         }
 
         h1 {
@@ -44,7 +111,11 @@
         }
 
         section {
-            margin-bottom: 48px;
+            margin-bottom: 40px;
+        }
+
+        section:last-of-type {
+            margin-bottom: 0;
         }
 
         h2 {
@@ -53,40 +124,7 @@
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: #999;
-            margin-bottom: 20px;
-        }
-
-        .entry {
-            margin-bottom: 28px;
-        }
-
-        .entry:last-child {
-            margin-bottom: 0;
-        }
-
-        .entry-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 4px;
-        }
-
-        .entry-title {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .entry-date {
-            font-size: 14px;
-            color: #999;
-            white-space: nowrap;
-            margin-left: 16px;
-        }
-
-        .entry-org {
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 6px;
+            margin-bottom: 16px;
         }
 
         .entry-desc {
@@ -103,107 +141,103 @@
         .skill {
             font-size: 14px;
             color: #333;
-            background: #f5f5f5;
-            padding: 4px 12px;
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 5px 14px;
+            border-radius: 20px;
+            transition: background 0.2s, transform 0.2s;
         }
 
-        .links a {
-            color: #1a1a1a;
-            text-decoration: none;
-            border-bottom: 1px solid #ccc;
-            transition: border-color 0.2s;
-        }
-
-        .links a:hover {
-            border-color: #1a1a1a;
-        }
-
-        .links-list {
-            display: flex;
-            gap: 24px;
-            font-size: 15px;
+        .skill:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-1px);
         }
 
         footer {
-            margin-top: 64px;
-            padding-top: 24px;
-            border-top: 1px solid #eee;
+            margin-top: 48px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
             font-size: 13px;
-            color: #bbb;
+            color: #aaa;
         }
 
         @media (max-width: 480px) {
             .container {
-                padding: 48px 20px 80px;
+                padding: 32px 12px 60px;
+            }
+
+            .glass-card {
+                padding: 32px 24px;
+                border-radius: 16px;
             }
 
             h1 {
                 font-size: 26px;
             }
-
-            .entry-header {
-                flex-direction: column;
-            }
-
-            .entry-date {
-                margin-left: 0;
-                margin-top: 2px;
-            }
         }
     </style>
 </head>
 <body>
+    <div class="bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
     <div class="container">
-        <header>
-            <h1>Dovas</h1>
-            <p class="subtitle">Software Engineer</p>
-        </header>
+        <div class="glass-card">
+            <header>
+                <h1>Dovas</h1>
+                <p class="subtitle">Software Engineer</p>
+            </header>
 
-        <section>
-            <h2>About</h2>
-            <p class="entry-desc">
-                I write code and sometimes it works. Based somewhere with WiFi.
-            </p>
-        </section>
+            <section>
+                <h2>About</h2>
+                <p class="entry-desc">
+                    I write code and sometimes it works. Based somewhere with WiFi.
+                </p>
+            </section>
 
-        <section>
-            <h2>Experience</h2>
-            <p class="entry-desc">None worth mentioning.</p>
-        </section>
+            <section>
+                <h2>Experience</h2>
+                <p class="entry-desc">None worth mentioning.</p>
+            </section>
 
-        <section>
-            <h2>Education</h2>
-            <p class="entry-desc">YouTube tutorials and Stack Overflow. No degree required when you can Google fast enough.</p>
-        </section>
+            <section>
+                <h2>Education</h2>
+                <p class="entry-desc">YouTube tutorials and Stack Overflow. No degree required when you can Google fast enough.</p>
+            </section>
 
-        <section>
-            <h2>Skills</h2>
-            <div class="skills-list">
-                <span class="skill">Golfing</span>
-                <span class="skill">Googling error messages</span>
-                <span class="skill">Closing laptop lid to fix bugs</span>
-                <span class="skill">Blaming DNS</span>
-                <span class="skill">Turning it off and on again</span>
-                <span class="skill">Looking busy in standups</span>
-                <span class="skill">Writing READMEs instead of code</span>
-                <span class="skill">Pushing to main on Fridays</span>
-            </div>
-        </section>
+            <section>
+                <h2>Skills</h2>
+                <div class="skills-list">
+                    <span class="skill">Golfing</span>
+                    <span class="skill">Googling error messages</span>
+                    <span class="skill">Closing laptop lid to fix bugs</span>
+                    <span class="skill">Blaming DNS</span>
+                    <span class="skill">Turning it off and on again</span>
+                    <span class="skill">Looking busy in standups</span>
+                    <span class="skill">Writing READMEs instead of code</span>
+                    <span class="skill">Pushing to main on Fridays</span>
+                </div>
+            </section>
 
-        <section>
-            <h2>Certifications</h2>
-            <p class="entry-desc">None. But I did finish a LinkedIn Learning course once. Forgot which one.</p>
-        </section>
+            <section>
+                <h2>Certifications</h2>
+                <p class="entry-desc">None. But I did finish a LinkedIn Learning course once. Forgot which one.</p>
+            </section>
 
-        <section>
-            <h2>Contact</h2>
-            <p class="entry-desc">dovas[at]dovas[dot]net</p>
-        </section>
+            <section>
+                <h2>Contact</h2>
+                <p class="entry-desc">dovas[at]dovas[dot]net</p>
+            </section>
 
-        <footer>
-            &copy; 2026 Dovas
-        </footer>
+            <footer>
+                &copy; 2026 Dovas
+            </footer>
+        </div>
     </div>
 </body>
 </html>
