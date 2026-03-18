@@ -856,6 +856,8 @@
             particles.push(p);
         }
 
+        let rafId;
+
         function animate() {
             ctx.clearRect(0, 0, w, h);
             ctx.globalCompositeOperation = 'lighter';
@@ -865,10 +867,19 @@
                 p.draw();
             }
 
-            requestAnimationFrame(animate);
+            rafId = requestAnimationFrame(animate);
         }
 
         animate();
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            } else if (!rafId) {
+                animate();
+            }
+        });
 
         // Dynamic favicon — green when active, red when tab is hidden
         (function() {
