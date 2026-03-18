@@ -107,6 +107,7 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            animation: shredder-vibrate 0.15s linear infinite;
         }
 
         /* Metallic brushed texture */
@@ -168,6 +169,25 @@
             50% { opacity: 0.5; }
         }
 
+        @keyframes shredder-vibrate {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-0.4px, 0.2px); }
+            30% { transform: translate(0.5px, -0.3px); }
+            50% { transform: translate(-0.3px, 0.1px); }
+            70% { transform: translate(0.4px, -0.2px); }
+            90% { transform: translate(-0.2px, 0.3px); }
+        }
+
+        @keyframes strip-sway {
+            0%, 100% { transform: rotate(var(--rot)) translateX(var(--tx)); }
+            50% { transform: rotate(calc(var(--rot) + var(--sway))) translateX(calc(var(--tx) + var(--sway-x))); }
+        }
+
+        @keyframes screw-turn {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+
         .shredder-screw {
             position: absolute;
             top: 50%;
@@ -179,6 +199,7 @@
             box-shadow:
                 inset 0 1px 1px rgba(255, 255, 255, 0.15),
                 0 1px 2px rgba(0, 0, 0, 0.4);
+            animation: screw-turn 6s linear infinite;
         }
 
         .shredder-screw::after {
@@ -194,7 +215,7 @@
         }
 
         .shredder-screw.left { left: 14px; }
-        .shredder-screw.right { right: 14px; }
+        .shredder-screw.right { right: 14px; animation-direction: reverse; }
 
         /* Output slot on bottom of shredder */
         .shredder-output {
@@ -225,6 +246,8 @@
             position: relative;
             box-shadow: 1px 0 1px rgba(0,0,0,0.08), -1px 0 1px rgba(0,0,0,0.05);
             transform-origin: top center;
+            animation: strip-sway var(--sway-dur, 3s) ease-in-out infinite;
+            animation-delay: var(--sway-delay, 0s);
             /* Subtle paper texture on strips */
             background-image: repeating-linear-gradient(
                 0deg,
@@ -430,7 +453,7 @@
         }
 
         #fire {
-            position: fixed;
+            position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
@@ -730,7 +753,12 @@
                 const rotation = (Math.random() - 0.5) * 6;
                 const translateX = (Math.random() - 0.5) * 3;
                 strip.style.height = height + 'px';
-                strip.style.transform = `rotate(${rotation}deg) translateX(${translateX}px)`;
+                strip.style.setProperty('--rot', rotation + 'deg');
+                strip.style.setProperty('--tx', translateX + 'px');
+                strip.style.setProperty('--sway', ((Math.random() - 0.5) * 3) + 'deg');
+                strip.style.setProperty('--sway-x', ((Math.random() - 0.5) * 1.5) + 'px');
+                strip.style.setProperty('--sway-dur', (2.5 + Math.random() * 2) + 's');
+                strip.style.setProperty('--sway-delay', (-Math.random() * 4) + 's');
                 strip.style.opacity = 0.85 + Math.random() * 0.15;
                 container.appendChild(strip);
             }
