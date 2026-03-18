@@ -31,14 +31,14 @@
             overflow-x: hidden;
             display: flex;
             justify-content: center;
-            padding-top: 40px;
-            padding-bottom: 200px;
+            padding: 40px 12px 200px;
         }
 
         .receipt {
             position: relative;
             z-index: 1;
-            width: 360px;
+            width: 100%;
+            max-width: 360px;
             background: #f5f2eb;
             padding: 32px 24px 48px;
             transform: rotate(-1.2deg);
@@ -70,19 +70,22 @@
             flex-direction: column;
             align-items: center;
             z-index: 1;
+            width: 100%;
+            max-width: 420px;
         }
 
         /* Shredder machine */
         .shredder {
             position: relative;
-            width: 400px;
+            width: 100%;
+            max-width: 400px;
             margin-top: -2px;
             z-index: 2;
             transform: rotate(-1.2deg);
         }
 
         .shredder-slot {
-            width: 370px;
+            width: calc(100% - 30px);
             height: 6px;
             background: #111;
             margin: 0 auto;
@@ -141,6 +144,7 @@
             letter-spacing: 0.35em;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.12);
+            white-space: nowrap;
         }
 
         .shredder-led {
@@ -193,7 +197,7 @@
 
         /* Output slot on bottom of shredder */
         .shredder-output {
-            width: 370px;
+            width: calc(100% - 30px);
             height: 4px;
             margin: 0 auto;
             background: #111;
@@ -343,6 +347,13 @@
             text-align: right;
         }
 
+        .savings-note {
+            font-size: 10px;
+            color: #888;
+            margin-top: -6px;
+            padding-left: 12px;
+        }
+
         .section-label {
             font-size: 11px;
             font-weight: bold;
@@ -427,21 +438,19 @@
             pointer-events: none;
         }
 
+        /* Tablets and smaller */
         @media (max-width: 420px) {
+            body {
+                padding: 24px 8px 160px;
+            }
+
             .receipt {
-                width: calc(100% - 24px);
-                padding: 24px 16px 40px;
+                padding: 24px 16px 36px;
                 transform: rotate(0deg);
             }
 
             .shredder {
-                width: calc(100% - 12px);
                 transform: rotate(0deg);
-            }
-
-            .shredder-slot,
-            .shredder-output {
-                width: calc(100% - 20px);
             }
 
             .shredder-strips {
@@ -455,6 +464,98 @@
             .line-item {
                 font-size: 12px;
             }
+
+            .line-item .dots::before {
+                content: '..............................';
+            }
+
+            .shredder-label {
+                font-size: 8px;
+                letter-spacing: 0.2em;
+            }
+        }
+
+        /* Very small phones */
+        @media (max-width: 340px) {
+            body {
+                padding: 16px 4px 140px;
+            }
+
+            .receipt {
+                padding: 20px 12px 32px;
+            }
+
+            .store-name {
+                font-size: 20px;
+                letter-spacing: 0.1em;
+            }
+
+            .store-info {
+                font-size: 10px;
+            }
+
+            .bullseye {
+                width: 36px;
+                height: 36px;
+                border-width: 6px;
+            }
+
+            .bullseye::after {
+                width: 12px;
+                height: 12px;
+            }
+
+            .line-item {
+                font-size: 11px;
+                line-height: 1.7;
+            }
+
+            .line-item .dots {
+                font-size: 9px;
+            }
+
+            .meta {
+                font-size: 10px;
+            }
+
+            .section-label {
+                font-size: 10px;
+            }
+
+            .total-section .grand-total {
+                font-size: 14px;
+            }
+
+            .barcode-bars span {
+                height: 30px;
+            }
+
+            .thank-you {
+                font-size: 12px;
+            }
+
+            .shredder-body {
+                height: 56px;
+            }
+
+            .shredder-label {
+                font-size: 7px;
+                letter-spacing: 0.15em;
+            }
+
+            .shredder-led {
+                right: 16px;
+                width: 5px;
+                height: 5px;
+            }
+
+            .shredder-screw {
+                width: 8px;
+                height: 8px;
+            }
+
+            .shredder-screw.left { left: 10px; }
+            .shredder-screw.right { right: 10px; }
         }
     </style>
 </head>
@@ -498,7 +599,7 @@
             <span class="dots"></span>
             <span class="price">$0.00</span>
         </div>
-        <div class="line-item" style="font-size:10px; color:#888; margin-top:-6px; padding-left:12px;">
+        <div class="line-item savings-note">
             <span class="label">  (SAVED $120,000.00)</span>
             <span class="dots"></span>
             <span class="price"></span>
@@ -616,10 +717,11 @@
     <canvas id="fire"></canvas>
 
     <script>
-        // Generate shredder strips
+        // Generate shredder strips — count scales with screen width
         (function() {
             const container = document.getElementById('strips');
-            const count = 32;
+            const screenW = window.innerWidth;
+            const count = screenW < 340 ? 20 : screenW < 420 ? 26 : 32;
             for (let i = 0; i < count; i++) {
                 const strip = document.createElement('div');
                 strip.className = 'strip';
@@ -628,7 +730,6 @@
                 const translateX = (Math.random() - 0.5) * 3;
                 strip.style.height = height + 'px';
                 strip.style.transform = `rotate(${rotation}deg) translateX(${translateX}px)`;
-                // Slight opacity variation for realism
                 strip.style.opacity = 0.85 + Math.random() * 0.15;
                 container.appendChild(strip);
             }
