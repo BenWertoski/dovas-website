@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dovas - blog</title>
+    <meta name="description" content="Notes from the workbench.">
+    <link rel="canonical" href="https://dovas.net/blog.html">
+    <meta property="og:title" content="Blog - Dovas">
+    <meta property="og:description" content="Notes from the workbench.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dovas.net/blog.html">
+    <meta property="og:image" content="https://dovas.net/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blog - Dovas">
+    <meta name="twitter:description" content="Notes from the workbench.">
+    <meta name="twitter:image" content="https://dovas.net/assets/og-image.png">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" id="favicon" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <nav class="nav" aria-label="Primary navigation">
+            <div class="nav-links">
+                <a href="index.html#about">About</a>
+                <a href="blog.html" aria-current="page">Blog</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+        <section class="section">
+            <div class="blog-header">
+                <div>
+                    <h1>blog</h1>
+                    <p>
+                        Short posts on software.
+                    </p>
+                </div>
+            </div>
+
+            <div class="post-list" style="margin-top: 48px;">
+                <article class="post-row post-featured">
+                    <div class="post-meta">
+                        <span>April 27, 2026</span>
+                    </div>
+                    <div class="post-content">
+                        <h2><a class="post-title-link" href="posts/5g-slice-mec-pivoting.html">5G Slices and the Shared MEC Problem</a></h2>
+                        <p class="post-excerpt">
+                            Cross-slice compromise is plausible when slices share a cloud-native MEC stack and isolation is logical rather than hard.
+                        </p>
+                        <img src="assets/5g-mec-diagram.svg" alt="Diagram showing 5G network slices connecting through shared MEC infrastructure with cross-slice attack path" width="840" height="360" loading="lazy" decoding="async">
+                    </div>
+                </article>
+
+                <article class="post-row post-featured">
+                    <div class="post-meta">
+                        <span>April 25, 2025</span>
+                    </div>
+                    <div class="post-content">
+                        <h2><a class="post-title-link" href="posts/ics-industrial-control-systems.html">The Open Door</a></h2>
+                        <p class="post-excerpt">
+                            Industrial control systems run the essential machinery of modern life. Far too many of them are still defended like it's 1979.
+                        </p>
+                        <img src="assets/shodan-teltonika-exposed.jpg" alt="Shodan showing exposed Teltonika device with ICS and self-signed tags" width="720" height="406" loading="lazy" decoding="async">
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a href="https://github.com/dovas-net" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://x.com/nogp" target="_blank" rel="noopener">X</a>
+        <a href="https://www.linkedin.com/in/dovas/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:dovas@dovas.net">Email</a>
+    </footer>
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Dovas",
+    "url": "https://dovas.net",
+    "jobTitle": "Software Engineer",
+    "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Switzerland"
+    }
+}
+</script>
+    <script src="main.js"></script>
+</body>
+</html>

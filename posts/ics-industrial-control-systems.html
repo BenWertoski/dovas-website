@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Open Door - Dovas</title>
+    <meta name="description" content="Industrial control systems run the essential machinery of modern life. Far too many of them are still defended like it's 1979.">
+    <link rel="canonical" href="https://dovas.net/posts/ics-industrial-control-systems.html">
+    <meta property="og:title" content="The Open Door - Dovas">
+    <meta property="og:description" content="Industrial control systems run the essential machinery of modern life. Far too many of them are still defended like it's 1979.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://dovas.net/posts/ics-industrial-control-systems.html">
+    <meta property="og:image" content="https://dovas.net/assets/og-image.png">
+    <meta property="article:published_time" content="2025-04-25">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Open Door - Dovas">
+    <meta name="twitter:description" content="Industrial control systems run the essential machinery of modern life. Far too many of them are still defended like it's 1979.">
+    <meta name="twitter:image" content="https://dovas.net/assets/og-image.png">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" id="favicon" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <nav class="nav" aria-label="Primary navigation">
+            <div class="nav-links">
+                <a href="../index.html#about">About</a>
+                <a href="../blog.html" aria-current="page">Blog</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main" class="blog-layout article-layout">
+        <aside class="sidebar">
+            <div class="sidebar-sticky">
+                <p class="sidebar-label">The Open Door</p>
+                <nav class="section-nav" aria-label="Article sections">
+                    <a href="#screenshot">The Screenshot</a>
+                    <a href="#what-ics">What ICS Is</a>
+                    <a href="#port-502">Port 502</a>
+                    <a href="#shodan">Shodan</a>
+                    <a href="#router">The Router</a>
+                    <a href="#airgap">The Air Gap</a>
+                    <a href="#blame">Where the Blame Really Lives</a>
+                    <a href="#when-wrong">When It Goes Wrong</a>
+                    <a href="#numbers">The Numbers</a>
+                    <a href="#mistakes">The Short List of Mistakes</a>
+                    <a href="#do">What to Actually Do</a>
+                    <a href="#why">Why this isn't a curiosity</a>
+                </nav>
+            </div>
+        </aside>
+
+        <article class="article-body">
+            <a class="back-link" href="../blog.html">← Back to Blog</a>
+
+            <header class="article-header">
+                <div class="eyebrow">
+                    <span class="section-label">ICS</span>
+                    <span class="section-label">April 25, 2025</span>
+                    <span class="section-label">Dovas Slanina</span>
+                </div>
+                <h1>The Open Door</h1>
+                <p class="lead">
+                    Industrial control systems run the unglamorous, essential machinery of modern life. Power grids, water treatment, district heating. And far too many of them are still defended like it's 1979.
+                </p>
+                <img src="../assets/shodan-teltonika-exposed.jpg" alt="Shodan showing exposed Teltonika device with ICS and self-signed tags" loading="lazy" decoding="async">
+            </header>
+
+            <div class="article-content">
+                <p class="tldr">
+                    <strong>TL;DR:</strong> Thousands of industrial control systems are accessible directly from the internet. Many still run Modbus, a protocol from 1979 with no authentication or encryption. It's not a theoretical problem - it's searchable, and people have used it to shut down heating systems.
+                </p>
+
+                <h2 id="screenshot">The Screenshot</h2>
+
+                <p>
+                    Ten minutes on Shodan. That's all it takes to go from "random IP somewhere in Eastern Europe" to "I am looking at the remote edge of a real industrial environment." A Teltonika Networks device in Vilnius, Lithuania, tagged with <code>ics</code> and <code>self-signed</code>. Two open ports: 443 and 502. That second one should make anyone in OT security sit up straight. Port 502 is the standard port for Modbus TCP – one of the oldest industrial protocols still in widespread use, and one of the least defensible.
+                </p>
+
+                <p>
+                    No zero-day, no spy thriller, no elite red team. Just an indexed device on the open internet, a search engine for exposed services, and a protocol that still assumes every packet arrives from a trusted factory floor.
+                </p>
+
+                <p>
+                    This article is about that gap: the world Modbus was designed for versus the one it actually lives in now. A 46-year-old protocol with no built-in security, influencing pumps, breakers, valves, heating loops, and things that move.
+                </p>
+
+                <h2 id="what-ics">What ICS Is</h2>
+
+                <p>
+                    Industrial Control Systems is the umbrella term for the digital machinery that controls physical processes. Electric substations, water treatment plants, district heating, manufacturing lines, pipelines, transport infrastructure. Under that umbrella sit SCADA (geographically distributed systems), DCS (more localized processes), and PLCs – the rugged controllers wired into motors, relays, sensors, and valves.
+                </p>
+
+                <p>
+                    For decades, these systems weren't designed for hostile networks. They ran on isolated serial links or tightly controlled plant networks where reliability mattered more than confidentiality. The assumed threat was equipment failure, not a stranger on the internet. That history explains a lot of the current mess: the protocols survived, the networks changed, the assumptions didn't catch up.
+                </p>
+
+                <h2 id="port-502">Port 502</h2>
+
+                <p>
+                    Modbus TCP lives on port <strong>502</strong>. Registered default. Port scanners test it first. If you find it exposed on a public IP, that's a problem. Sometimes vendors or operators shuffle Modbus to a different port hoping to hide it. That doesn't fix anything. Port 502 is still the front door.
+                </p>
+
+                <p>
+                    Modicon designed Modbus in 1979 for communication between devices in trusted environments. Simplicity and uptime were the goals. Not identity, secrecy, or tamper resistance. Classic Modbus TCP doesn't include authentication, doesn't encrypt traffic, and doesn't provide message integrity. If a device can reach a Modbus server and format a valid request, the server obeys.
+                </p>
+
+                <p>
+                    Practically: someone who can talk to port 502 may be able to flip a pump, change a setpoint, or falsify the values an operator is reading. No authentication means anyone can talk. No encryption means anyone on the path can listen. No integrity controls means replaying or modifying traffic is far easier than it should be in any system that touches the physical world.
+                </p>
+
+                <p>
+                    That model made sense on a cabled plant floor in 1979. In 2026, on globally routed IP networks full of scanners, opportunists, and state-backed actors, it's absurd. Exposing raw Modbus TCP to the internet isn't a nuanced risk decision. It's the industrial equivalent of leaving the control room unlocked and hoping nobody curious wanders in.
+                </p>
+
+                <h2 id="shodan">Shodan</h2>
+
+                <p>
+                    "Google for devices" undersells it. Shodan indexes services, not web pages. It scans address space, records banners, indexes ports, and tells you what kind of equipment answered and where. For internet-facing OT, exposure isn't obscure anymore. It's searchable.
+                </p>
+
+                <p>
+                    The scale became measurable. Forescout had roughly <strong>110,000 internet-facing ICS/OT devices</strong> in early 2024. SecurityWeek, citing Censys: <strong>145,000 exposed ICS systems</strong> across 175 countries by late 2024. Different groups count differently. They all point the same direction.
+                </p>
+
+                <h2 id="router">The Router Is Not a Safe Boundary</h2>
+
+                <p>
+                    One of the more persistent myths in OT is that the industrial router itself is the security strategy. Put a rugged little box at the edge, maybe give it LTE and a web UI, and somehow the plant feels protected. In practice, that box is often just another attack surface. Sometimes a very convenient one.
+                </p>
+
+                <p>
+                    For Teltonika specifically: in 2023, researchers disclosed multiple vulnerabilities affecting RUT-series devices and the Remote Management System, including paths that could enable remote compromise. National cybersecurity agencies and vendors issued advisories. Teltonika published fixes. The lesson: the thing standing between your ICS and the public internet can itself be the intrusion point.
+                </p>
+
+                <p>
+                    Back to that screenshot. An exposed router with a management interface and an industrial protocol behind it isn't "observability." It's stacked risk: edge exposure, possible device-level weaknesses, and a legacy protocol downstream that still assumes trust.
+                </p>
+
+                <h2 id="airgap">The Air Gap Myth</h2>
+
+                <p>
+                    ICS security leaned on a comforting phrase for years: <em>air gap</em>. The idea was simple – if the control network is isolated, the attacker can't reach it. In the era of vendor remote access, cloud dashboards, engineering laptops, LTE backhaul, outsourced maintenance, and business systems that want live plant data, that assumption is more folklore than architecture.
+                </p>
+
+                <p>
+                    Modern operations want IT/OT convergence because it delivers real value: telemetry, predictive maintenance, remote diagnostics, tighter planning. Every extra connection creates more routes into environments that weren't designed to defend themselves. Even without a formal convergence plan, accidental convergence happens through convenience: a contractor laptop, a forgotten modem, a remote management tunnel, a USB stick, a firewall rule that nobody closes.
+                </p>
+
+                <p>
+                    Stuxnet is the reminder that "not internet-connected" isn't the same as "secure." It reached Iran's Natanz facility through removable media, manipulated Siemens PLC logic tied to uranium centrifuges, and caused physical damage while feeding operators normal readings. The air gap didn't fail because of some clever exploit. It failed because real operations involve humans, maintenance workflows, and trusted devices that move between worlds.
+                </p>
+
+                <h2 id="blame">Where the Blame Really Lives</h2>
+
+                <p>
+                    The easy instinct is to find one villain. Modbus, obviously – it's a trust-based protocol from 1979 that still behaves like one. Operators, sure – remote access is convenient, segmentation takes effort, and changing default credentials is a meeting nobody wants to schedule. And vendors, of course – the rugged box at the edge doesn't automatically mean rugged security.
+                </p>
+
+                <p>
+                    Modbus is the obvious target. It's a trust-based protocol from 1979, and it still behaves like one. No authentication, no encryption, no replay protection. But it can't fix itself, and the real question is why deployments keep giving it modern exposure.
+                </p>
+
+                <p>
+                    Then there's the operator side. Remote access is convenient. Segmentation takes effort. Default credentials stay because changing them is a meeting nobody wants to schedule. Modbus can be wrapped, filtered, and segmented. It mostly isn't.
+                </p>
+
+                <p>
+                    And vendors. The rugged box at the edge doesn't automatically mean rugged security. Routers, gateways, and remote management platforms have shipped with flaws that undermine otherwise reasonable architectures. When the edge device is weak and the protocol assumes trust, compromise stops being surprising.
+                </p>
+
+                <h2 id="when-wrong">When It Goes Wrong</h2>
+
+                <p>
+                    ICS insecurity is different from regular IT insecurity. The outcome isn't a leaked database or a trashed server. These systems move matter. When they fail, the consequences are mechanical, environmental, and human.
+                </p>
+
+                <h3>Stuxnet (2010)</h3>
+
+                <p>
+                    The one that made the world pay attention. Siemens S7 PLCs at Iran's Natanz uranium facility, manipulated to degrade centrifuge performance while operators saw normal readings. Stuxnet didn't breach the network – it came in on removable media. Someone plugged in a USB stick.
+                </p>
+
+                <p>
+                    But what Stuxnet actually proved was simpler: ICS wasn't too obscure to target, and it wasn't too isolated to reach. Once that became clear, attackers started paying attention.
+                </p>
+
+                <h3>Ukraine (2015, 2016)</h3>
+
+                <p>
+                    December 2015: attackers worked through utility systems and manually opened breakers to cut power. Operators watched their own systems being driven away from them in real time. The 2016 version, CRASHOVERRIDE, codified the same tradecraft into malware. What had been careful operator-driven abuse became more automated, repeatable, scalable.
+                </p>
+
+                <h3>TRITON (2017)</h3>
+
+                <p>
+                    Schneider Electric Triconex Safety Instrumented Systems at a petrochemical plant in the Middle East. These are the systems meant to shut things down when something goes badly wrong. The target wasn't process uptime. It was the last line of defense.
+                </p>
+
+                <p>
+                    The campaign was uncovered after an operational error triggered an unexpected shutdown. The plant found the attackers because the attack tripped over itself. That's not a security win.
+                </p>
+
+                <h3>FrostyGoop (2024)</h3>
+
+                <p>
+                    January in Lviv. Cold enough that district heating isn't a luxury. Somewhere in the utility environment, a small Windows malware sample starts doing something almost insultingly simple: it speaks Modbus over port 502.
+                </p>
+
+                <p>
+                    600 apartment buildings without heat for about 48 hours. 100,000 residents in winter conditions. The malware didn't need a zero-day chain. The protocol already trusted whoever could reach it. No dramatic payload – just valid-looking industrial commands to systems built to obey them.
+                </p>
+
+                <p>
+                    The consequence was literal: radiators went cold, taps ran icy. Residents found out that a protocol older than some of the buildings it serves was still deciding whether winter stayed outside.
+                </p>
+
+                <h2 id="numbers">The Numbers</h2>
+
+                <p>
+                    ICS vulnerabilities hit record highs in 2025, with advisories crossing 500 and average severity going up. That part's probably stale by the time you read this. The trajectory hasn't changed.
+                </p>
+
+                <p>
+                    On exposure: Forescout put internet-facing ICS/OT devices at around 110,000 in early 2024. SecurityWeek, citing Censys data, had 145,000 across 175 countries by late 2024. The exact numbers are moving targets. The direction isn't.
+                </p>
+
+                <h2 id="mistakes">The Short List of Mistakes</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mistake</th>
+                            <th>Why it keeps happening</th>
+                            <th>Why it matters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Exposing port 502 to the internet</td>
+                            <td>Remote access is convenient, legacy systems are awkward to modernise</td>
+                            <td>Modbus TCP has almost no native security. Exposed services are easy targets.</td>
+                        </tr>
+                        <tr>
+                            <td>Treating the industrial router as "the security layer"</td>
+                            <td>Rugged edge gear creates a false sense of containment</td>
+                            <td>Router and management-plane flaws can become the bridge into OT.</td>
+                        </tr>
+                        <tr>
+                            <td>Believing in the air gap after adding remote access</td>
+                            <td>Operations need telemetry, support, and cloud visibility</td>
+                            <td>IT/OT convergence and convenience links quietly erase isolation.</td>
+                        </tr>
+                        <tr>
+                            <td>Keeping default or weak credentials nearby</td>
+                            <td>Password hygiene is often secondary in OT operations</td>
+                            <td>Weak edge credentials compound protocol insecurity and enable lateral movement.</td>
+                        </tr>
+                        <tr>
+                            <td>Running unpatchable legacy controllers without compensating controls</td>
+                            <td>Replacement is expensive, downtime is hard to justify</td>
+                            <td>Old systems stay exposed long after their security assumptions are obsolete.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2 id="do">What to Actually Do</h2>
+
+                <p>
+                    No magic fix for decades of accumulated mess, but there's a floor. Below it, no serious operator should fall.
+                </p>
+
+                <ul>
+                    <li>If Shodan can see port 502 on your external range, you're already in trouble. Publicly reachable Modbus TCP is an operational failure, not a hardening backlog.</li>
+                    <li>No raw Modbus over the internet. If it must cross a wide-area link, tunnel it inside something with actual authentication. Better: terminate industrial traffic internally and expose only mediated services upstream.</li>
+                    <li>Segment. IT from OT. Within OT: safety systems, control systems, engineering workstations, and field devices should not share a blast radius.</li>
+                    <li>Put controls in front of critical systems that understand industrial protocols. Industrial firewalls that know Modbus function codes beat generic perimeter boxes that only see port numbers.</li>
+                    <li>Know what actually speaks industrial protocols on your network. A surprising amount of OT insecurity starts with nobody knowing which devices are reachable and from where.</li>
+                    <li>Scan your own external exposure the same way an attacker would. If you can find it with Shodan or Censys in under ten minutes, assume someone already has.</li>
+                    <li>Some hardware can't be patched and won't ever be. When that's the case, architecture is the control: gateways, one-way flows, aggressive access limitation.</li>
+                </ul>
+
+                <p>
+                    The easy wins are unglamorous: close 502 on the WAN side, kill default credentials, disable unnecessary remote services, actually review what's exposed. The hard wins are architectural and require downtime somebody has to schedule and pay for.
+                </p>
+
+                <h2 id="why">Why this isn't a curiosity</h2>
+
+                <p>
+                    That device in the screenshot isn't interesting because it's rare. It's interesting because it's ordinary. Across power, heating, water, transport, and manufacturing, similar devices are sitting exposed every day, fronting systems that still rely on protocols designed for a plant floor that no longer exists.
+                </p>
+
+                <p>
+                    FrostyGoop wasn't sophisticated. It succeeded because the industry keeps giving old, trusting protocols modern exposure and hoping habit will make up the difference. The question stopped being "can this be manipulated?" years ago. Real incidents answered that.
+                </p>
+
+                <p>
+                    The actual question is how many environments would survive being looked at hard tomorrow. If a stranger can find port 502 from a search bar, and a threat actor can reach equipment that still assumes every valid packet is friendly – it's not a theoretical problem. It's live, searchable, and connected to things that can break.
+                </p>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <a href="https://github.com/dovas-net" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://x.com/nogp" target="_blank" rel="noopener">X</a>
+        <a href="https://www.linkedin.com/in/dovas/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:dovas@dovas.net">Email</a>
+    </footer>
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "The Open Door",
+    "description": "Industrial control systems run the essential machinery of modern life. Far too many of them are still defended like it's 1979.",
+    "author": {
+        "@type": "Person",
+        "name": "Dovas Slanina",
+        "url": "https://dovas.net"
+    },
+    "datePublished": "2025-04-25",
+    "dateModified": "2025-04-25",
+    "url": "https://dovas.net/posts/ics-industrial-control-systems.html"
+}
+</script>
+    <script src="main.js"></script>
+</body>
+</html>

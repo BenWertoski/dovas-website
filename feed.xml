@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Dovas</title>
+    <subtitle>Notes from the workbench.</subtitle>
+    <link href="https://dovas.net/feed.xml" rel="self"/>
+    <link href="https://dovas.net/"/>
+    <updated>2026-04-27T00:00:00Z</updated>
+    <id>https://dovas.net/</id>
+    <author>
+        <name>Dovas Slanina</name>
+        <email>dovas@dovas.net</email>
+    </author>
+    <entry>
+        <title>5G Slices and the Shared MEC Problem</title>
+        <link href="https://dovas.net/posts/5g-slice-mec-pivoting.html"/>
+        <id>https://dovas.net/posts/5g-slice-mec-pivoting.html</id>
+        <published>2026-04-27T00:00:00Z</published>
+        <summary>Cross-slice compromise is plausible when slices share a cloud-native MEC stack and isolation is logical rather than hard.</summary>
+    </entry>
+    <entry>
+        <title>The Open Door</title>
+        <link href="https://dovas.net/posts/ics-industrial-control-systems.html"/>
+        <id>https://dovas.net/posts/ics-industrial-control-systems.html</id>
+        <published>2025-04-25T00:00:00Z</published>
+        <summary>Industrial control systems run the essential machinery of modern life. Far too many of them are still defended like it's 1979.</summary>
+    </entry>
+</feed>

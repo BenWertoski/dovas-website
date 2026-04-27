@@ -1,19 +1,19 @@
 # dovas.net
 
-My personal website. It's black and white because colors are a runtime dependency I refuse to ship.
+My personal website and blog index. It is intentionally simple: static HTML, CSS, and a tiny bit of JavaScript for small browser niceties.
 
 ## Stack
 
 - HTML
 - CSS
-- That's it. No node_modules were harmed in the making of this website.
+- Vanilla JavaScript
 
 ## Features
 
-- Loads faster than your CI pipeline
-- Zero JavaScript — because the best code is no code
-- Fully responsive (unlike me on Slack after 5pm)
-- WCAG compliant contrast ratio (turns out black on white was accessible all along)
+- Personal homepage
+- Blog/notes section
+- Responsive layout
+- No build step
 
 ## Development
 
@@ -31,4 +31,4 @@ If the site is down, it's probably a DNS issue. It's always a DNS issue.
 
 ## License
 
-[The Dovas License (DL) v1.0](LICENSE) — read the terms, they're unreasonable.
+[The Dovas License (DL) v1.0](LICENSE) - read the terms, they're unreasonable.
