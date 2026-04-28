@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISA's April 2026 KEV Additions - Dovas</title>
+    <meta name="description" content="CISA added four vulnerabilities to the KEV catalog in late April 2026: SimpleHelp, Samsung MagicINFO, and D-Link DIR-823X. Here's what actually matters.">
+    <link rel="canonical" href="https://dovas.net/posts/cisa-kev-april-2026.html">
+    <meta property="og:title" content="CISA's April 2026 KEV Additions - Dovas">
+    <meta property="og:description" content="CISA added four vulnerabilities to the KEV catalog in late April 2026: SimpleHelp, Samsung MagicINFO, and D-Link DIR-823X. Here's what actually matters.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://dovas.net/posts/cisa-kev-april-2026.html">
+    <meta property="og:image" content="https://dovas.net/assets/og-image.png">
+    <meta property="article:published_time" content="2026-04-28">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CISA's April 2026 KEV Additions - Dovas">
+    <meta name="twitter:description" content="CISA added four vulnerabilities to the KEV catalog in late April 2026: SimpleHelp, Samsung MagicINFO, and D-Link DIR-823X. Here's what actually matters.">
+    <meta name="twitter:image" content="https://dovas.net/assets/og-image.png">
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" id="favicon" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+        <nav class="nav" aria-label="Primary navigation">
+            <div class="nav-links">
+                <a href="../index.html#about">About</a>
+                <a href="../blog.html" aria-current="page">Blog</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main" class="blog-layout article-layout">
+        <aside class="sidebar">
+            <div class="sidebar-sticky">
+                <p class="sidebar-label">KEV April 2026</p>
+                <nav class="section-nav" aria-label="Article sections">
+                    <a href="#what-cisa-added">What CISA Added</a>
+                    <a href="#simplehelp">SimpleHelp</a>
+                    <a href="#samsung">Samsung MagicINFO</a>
+                    <a href="#dlink">D-Link DIR-823X</a>
+                    <a href="#threat-environment">Threat Environment</a>
+                    <a href="#priorities">Defensive Priorities</a>
+                </nav>
+            </div>
+        </aside>
+
+        <article class="article-body">
+            <a class="back-link" href="../blog.html">← Back to Blog</a>
+
+            <header class="article-header">
+                <div class="eyebrow">
+                    <span class="section-label">KEV</span>
+                    <span class="section-label">April 28, 2026</span>
+                    <span class="section-label">Dovas Slanina</span>
+                </div>
+                <h1>CISA's April 2026 KEV Additions</h1>
+                <p class="lead">
+                    CISA added four vulnerabilities to the Known Exploited Vulnerabilities catalog in late April 2026: two in SimpleHelp, one in Samsung MagicINFO 9 Server, and one in D-Link DIR-823X routers. Here's what actually matters.
+                </p>
+                <img src="../assets/cisa-kev-april-2026.png" alt="CISA KEV catalog showing CVE-2024-57726, CVE-2024-57728, CVE-2024-7399, and CVE-2025-29635" loading="lazy" decoding="async">
+            </header>
+
+            <div class="article-content">
+                <p class="tldr">
+                    <strong>TL;DR:</strong> CISA added SimpleHelp (CVE-2024-57726, CVE-2024-57728), Samsung MagicINFO (CVE-2024-7399), and D-Link DIR-823X (CVE-2025-29635) to KEV. The SimpleHelp bugs form a server-takeover chain already exploited in ransomware campaigns. The Samsung patch was incomplete. The D-Link is end-of-life with no fix. Treat KEV as evidence of live exploitation, not a patch checklist.
+                </p>
+
+                <h2 id="what-cisa-added">What CISA Actually Added</h2>
+
+                <p>
+                    On April 24, 2026, CISA added four vulnerabilities to the KEV (Known Exploited Vulnerabilities) catalog:
+                </p>
+
+                <ul>
+                    <li><strong>CVE-2024-57726</strong> and <strong>CVE-2024-57728</strong> in SimpleHelp — an MSP-focused remote support platform</li>
+                    <li><strong>CVE-2024-7399</strong> in Samsung MagicINFO 9 Server — a digital signage management platform</li>
+                    <li><strong>CVE-2025-29635</strong> in D-Link DIR-823X routers — an end-of-life home router</li>
+                </ul>
+
+                <p>
+                    The federal remediation due date is May 8, 2026. That matters if you're a federal agency. For everyone else, the date is a signal: this is urgent.
+                </p>
+
+                <p>
+                    The NVD (National Vulnerability Database) records show CVE-2024-7399 at severity 9.8 and CVE-2025-29635 at 7.2. Those numbers are almost beside the point. CISA's KEV process is explicitly evidence-driven — entries mean someone is already exploiting these in the wild.
+                </p>
+
+                <h2 id="simplehelp">SimpleHelp and the MSP Blast Radius</h2>
+
+                <p>
+                    SimpleHelp is remote support software used by managed service providers (MSPs) to access customer machines. The two CVEs form a practical takeover chain:
+                </p>
+
+                <ul>
+                    <li><strong>CVE-2024-57726</strong> lets a low-privilege technician create over-permissioned API keys and escalate to server administrator</li>
+                    <li><strong>CVE-2024-57728</strong> lets an admin upload a crafted zip and write files anywhere on the server filesystem</li>
+                </ul>
+
+                <p>
+                    Horizon3.ai disclosed these to SimpleHelp in January 2025. Patches dropped within days. By January 22, Arctic Wolf was already seeing unauthorized access through SimpleHelp. The American Hospital Association reported ransomware attacks potentially linked to these flaws by January 29. By June 2025, CISA warned that ransomware actors were leveraging them in double-extortion operations.
+                </p>
+
+                <p>
+                    Microsoft later tied these CVEs to Storm-1175 in Medusa ransomware operations. Sophos documented a DragonForce case where an MSP's SimpleHelp instance deployed ransomware across customer endpoints.
+                </p>
+
+                <p>
+                    The platform's reach is the real problem. One SimpleHelp server compromise can yield intrusions across every organization that server manages. For ransomware actors, that's exactly the supply-chain leverage they want.
+                </p>
+
+                <h2 id="samsung">Samsung MagicINFO and the Patch Problem</h2>
+
+                <p>
+                    CVE-2024-7399 is a path traversal flaw in Samsung MagicINFO 9 Server versions before 21.1050. The <code>/MagicInfo/servlet/SWUpdateFileUploader</code> endpoint didn't require authentication, let attackers control the save path, and didn't restrict dangerous file types. Unauthenticated upload of a JSP web shell gave SYSTEM-level code execution on default Windows deployments.
+                </p>
+
+                <p>
+                    Samsung patched in August 2024. That should have been the end of it. It wasn't.
+                </p>
+
+                <p>
+                    Huntress reported in May 2025 that version 21.1050.0 was still exploitable with the public PoC. Arctic Wolf later tied the complete fix to CVE-2025-4632 and version 21.1052. The first patch either was incomplete or covered a separate but extremely similar flaw.
+                </p>
+
+                <p>
+                    Exploitation was rapid. SSD published its advisory on April 30, 2025. Within days, SANS reported Mirai-style attempts uploading a JSP shell and pulling down a multi-architecture bot payload. Rapid7 published a Metasploit module in May 2025.
+                </p>
+
+                <p>
+                    The takeaway: any statement that "21.1050 fixed MagicINFO" is now outdated and operationally unsafe.
+                </p>
+
+                <h2 id="dlink">D-Link DIR-823X and the End-of-Life Trap</h2>
+
+                <p>
+                    CVE-2025-29635 is a command injection flaw in D-Link DIR-823X firmware versions 240126 and 240802, reachable through POST requests to <code>/goform/set_prohibiting</code>. D-Link's September 2025 lifecycle notice says the DIR-823X reached end-of-life in November 2024. There is no supported fix. No firmware development. No customer support.
+                </p>
+
+                <p>
+                    Akamai SIRT first saw active exploitation in early March 2026. The attacks fetched a Mirai variant called <strong>tuxnokill</strong> from 88.214.20[.]14, contacted C2 at 64.89.161[.]130:44300, and exposed a standard DDoS menu including TCP SYN, ACK, STOMP, multiple UDP methods, and HTTP NULL.
+                </p>
+
+                <p>
+                    The same actor was targeting CVE-2023-1389 on TP-Link Archer AX21 and an RCE bug in ZTE ZXV10 H108L routers. This is purposeful multi-architecture botnet building.
+                </p>
+
+                <p>
+                    There's no remediation path. Only replacement.
+                </p>
+
+                <h2 id="threat-environment">What This Batch Says About the Threat Environment</h2>
+
+                <p>
+                    Three things stand out:
+                </p>
+
+                <ol>
+                    <li><strong>Management planes are premium targets.</strong> SimpleHelp sits directly on remote administration paths into customer systems. MagicINFO is the control plane for distributed signage infrastructure. Both give attackers trusted paths into downstream systems.</li>
+                    <li><strong>Unsupported edge hardware remains profitable.</strong> The DIR-823X is end-of-life, but the vulnerability is publicly known, the device is still widely deployed, and botnet operators are actively exploiting it. Old hardware is a low-cost, high-yield source of botnet capacity.</li>
+                    <li><strong>KEV is evidence, not a checklist.</strong> When a CVE appears in KEV, the working assumption should shift from "someone could exploit this" to "someone already is."</li>
+                </ol>
+
+                <h2 id="priorities">Immediate Defensive Priorities</h2>
+
+                <h3>SimpleHelp</h3>
+
+                <p>
+                    Move immediately to fixed versions — 5.5.8, 5.4.10, or 5.3.9. Then treat the server as potentially compromised:
+                </p>
+
+                <ul>
+                    <li>Change the administrator password</li>
+                    <li>Rotate technician passwords</li>
+                    <li>Create new API tokens</li>
+                    <li>Restrict technician, administrator, and API source IPs</li>
+                    <li>Review for unexpected API tokens or technician logins</li>
+                    <li>Check managed endpoints for modified <code>serviceconfig.xml</code> files pointing to unauthorized servers</li>
+                </ul>
+
+                <h3>Samsung MagicINFO</h3>
+
+                <p>
+                    Patch to version 21.1052 specifically. Do not assume 21.1050 is sufficient. Review for requests to <code>SWUpdateFileUploader</code>, unexpected <code>.jsp</code> files, web shell artifacts, and exposure on TCP 7001 or 7002.
+                </p>
+
+                <h3>D-Link DIR-823X</h3>
+
+                <p>
+                    Replace the device. If replacement cannot happen immediately, remove internet exposure, segment tightly, and monitor for requests to <code>/goform/set_prohibiting</code> or outbound connections to 88.214.20[.]14 and 64.89.161[.]130.
+                </p>
+
+                <p>
+                    The lesson across all three: confirmed exploitation converts nominally patched or partially understood issues into immediate operational problems. When CISA adds a CVE to KEV, it's the floor, not the ceiling.
+                </p>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <a href="https://github.com/dovas-net" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://x.com/nogp" target="_blank" rel="noopener">X</a>
+        <a href="https://www.linkedin.com/in/dovas/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:dovas@dovas.net">Email</a>
+    </footer>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "CISA's April 2026 KEV Additions",
+        "description": "CISA added four vulnerabilities to the KEV catalog in late April 2026: SimpleHelp, Samsung MagicINFO, and D-Link DIR-823X. Here's what actually matters.",
+        "author": {
+            "@type": "Person",
+            "name": "Dovas Slanina",
+            "url": "https://dovas.net"
+        },
+        "datePublished": "2026-04-28",
+        "dateModified": "2026-04-28",
+        "url": "https://dovas.net/posts/cisa-kev-april-2026.html"
+    }
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>
